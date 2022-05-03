@@ -1,18 +1,18 @@
 //@ts-check
 
-import React,{ useState } from 'react'
-import PropTypes from 'prop-types'
+import { useState } from 'react'
 import Rows from './Rows'
-import './styles.css'
+import PropTypes from 'prop-types'
+
 /**
  *
  * @param {Object} props
  * @param {Array} props.data
  * @param {Array} props.labels
- * @param {Number} props.numberOfItemsByPage
+ * @param {Number} props.pagination
  * @returns {React.ReactElement}
  */
-function Table({ data, labels, numberOfItemsByPage }) {
+function Table({ data, labels, pagination }) {
   const [pageNumber, setPageNumber] = useState(1)
 
   function page(
@@ -24,7 +24,7 @@ function Table({ data, labels, numberOfItemsByPage }) {
   }
 
   return (
-    <div id='table'>
+    <div id="table">
       <table>
         <thead>
           <tr>
@@ -36,7 +36,7 @@ function Table({ data, labels, numberOfItemsByPage }) {
           </tr>
         </thead>
         <tbody>
-          <Rows data={page(data, numberOfItemsByPage, pageNumber)} />
+          <Rows data={page(data, pagination, pageNumber)} />
         </tbody>
       </table>
       <div className={'pagination'}>
@@ -45,8 +45,8 @@ function Table({ data, labels, numberOfItemsByPage }) {
         </button>
         <button
           onClick={() =>
-            page(data, numberOfItemsByPage, pageNumber).length ===
-              numberOfItemsByPage && setPageNumber(pageNumber + 1)
+            page(data, pagination, pageNumber).length === pagination &&
+            setPageNumber(pageNumber + 1)
           }
         >
           Next
@@ -59,8 +59,11 @@ function Table({ data, labels, numberOfItemsByPage }) {
 export default Table
 
 Table.propType = {
-  id: PropTypes.string.isRequired,
-  className: PropTypes.string,
   data: PropTypes.array.isRequired,
   labels: PropTypes.array.isRequired,
+  pagination: PropTypes.number.isRequired,
+}
+
+Table.defaultProps = {
+  pagination: 10,
 }
